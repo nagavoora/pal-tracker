@@ -2,17 +2,17 @@ package io.pivotal.pal.tracker;
 
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class InMemoryTimeEntryRepository implements TimeEntryRepository
 {
-    private Map<Long, TimeEntry> map = new HashMap<>();
+    private Map<Long, TimeEntry> map = new ConcurrentHashMap<>();
     private long counter = 0;
 
     public TimeEntry create(TimeEntry timeEntry) {
         counter = counter + 1;
-        long id = counter;
-        TimeEntry savedTimeEntry = new TimeEntry(id, timeEntry.getProjectId(), timeEntry.getUserId(), timeEntry.getDate(), timeEntry.getHours());
-        map.put(id, savedTimeEntry);
+        TimeEntry savedTimeEntry = new TimeEntry(counter, timeEntry.getProjectId(), timeEntry.getUserId(), timeEntry.getDate(), timeEntry.getHours());
+        map.put(counter, savedTimeEntry);
         return savedTimeEntry;
     }
 

@@ -1,6 +1,5 @@
 package io.pivotal.pal.tracker;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,12 +8,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/time-entries")
 public class TimeEntryController {
-    private final TimeEntryRepository repo;
-    public static long idval = 1L;
-
-    @Autowired
-    public TimeEntryRepository timeEntryRepository;
-
+    private TimeEntryRepository repo;
+//    public static long idval = 1L;
 
     public TimeEntryController(TimeEntryRepository timeEntryRepository) {
         repo = timeEntryRepository;
@@ -23,10 +18,10 @@ public class TimeEntryController {
    @PostMapping
     public ResponseEntity create(@RequestBody TimeEntry timeEntryToCreate) {
 
-        timeEntryToCreate.setId(idval);
-        repo.create(timeEntryToCreate);
-        idval++;
-        return new ResponseEntity(timeEntryToCreate, HttpStatus.CREATED);
+//        timeEntryToCreate.setId(idval);
+       TimeEntry timeEntry = repo.create(timeEntryToCreate);
+//        idval++;
+        return new ResponseEntity(timeEntry, HttpStatus.CREATED);
 
     }
 
