@@ -5,6 +5,26 @@ import java.util.Objects;
 
 public class TimeEntry {
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setProjectId(long projectId) {
+        this.projectId = projectId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public void setHours(int hours) {
+        this.hours = hours;
+    }
+
     private long id;
     private long projectId;
     private long userId;
