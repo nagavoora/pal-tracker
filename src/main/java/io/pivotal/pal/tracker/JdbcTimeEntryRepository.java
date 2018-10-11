@@ -1,14 +1,17 @@
 package io.pivotal.pal.tracker;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
@@ -34,7 +37,9 @@ private final ResultSetExtractor<TimeEntry> extractor =
     public TimeEntry create(TimeEntry timeEntry) {
         KeyHolder generatedKeyHolder = new GeneratedKeyHolder();
 
-        jdbcTemplate.update(connection -> {
+        jdbcTemplate.update(new PreparedStatementCreator()
+        {   @Override
+        public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
             PreparedStatement statement = connection.prepareStatement(
                     "INSERT INTO time_entries (project_id, user_id, date, hours) " +
                             "VALUES (?, ?, ?, ?)",
@@ -47,6 +52,7 @@ private final ResultSetExtractor<TimeEntry> extractor =
             statement.setInt(4, timeEntry.getHours());
 
             return statement;
+        }
         }, generatedKeyHolder);
 
         return find(generatedKeyHolder.getKey().longValue());
